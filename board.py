@@ -1,17 +1,35 @@
+from cell import Cell
 class Board:
 
-	def __init__(self,width,height):
+	def __init__(self,size):
 		"""
 			this is the constructor for the board in the game of life
 		"""
-		self.width=width
-		self.height=height
-		self.board=[[]]
-		for x in range(self.width):
-			for y in range(self.height):
-				self.board[x][y]=Cell(x,y,False);
+		self.size=size
+		
+		self.board={}
 
+		#use dictionary to represent the board
+		for x in range(self.size):
+			for y in range(self.size):
+				self.board[(x,y)]=Cell(x,y,False)
+	
 
+	def getSize(self):
+		return self.size
+
+	def getLive(self):
+		"""
+		returns the number of live cells in the board
+		"""
+		live_ones=0
+		for i in range(self.size):
+			for j in range(self.size):
+				if self.getCell(i,j).isAlive():
+					live_ones+=1
+				else:
+					continue
+		return live_ones
 	def getBoard(self):
 		"""
 			returns the current status of the board at any time
@@ -23,7 +41,7 @@ class Board:
 		"""
 			gets a cell from the board
 		"""
-		return self.board[x][y]
+		return self.board[(x,y)]
 
 	def getLiveNeighbors(self,cell):
 		"""
@@ -33,47 +51,87 @@ class Board:
 		x=cell.getX()
 		y=cell.getY()
 
-		if(getCell(x-1,y-1).isAlive()):
-			counter++
-		if(getCell(x,y-1).isAlive()):
-			counter++
-		if(getCell(x+1,y-1).isAlive()):
-			counter++
-		if(getCell(x-1,y).isAlive()):
-			counter++
-		if(getCell(x+1,y).isAlive()):
-			counter++
-		if(getCell(x-1,y+1).isAlive()):
-			counter++
-		if(getCell(x,y+1).isAlive()):
-			counter++
-		if(getCell(x+1,y+1).isAlive()):
-			counter++
-		return counter;
+
+		if(x-1<0 or y-1<0 or  x+1>=self.getSize() or y+1>=self.getSize()):
+			pass
+		else:
+			if(self.getCell(x-1,y-1).isAlive()):
+				counter+=1
+			if(self.getCell(x,y-1).isAlive()):
+				counter+=1
+			if(self.getCell(x+1,y-1).isAlive()):
+				counter+=1
+			if(self.getCell(x-1,y).isAlive()):
+				counter+=1
+			if(self.getCell(x+1,y).isAlive()):
+				counter+=1
+			if(self.getCell(x-1,y+1).isAlive()):
+				counter+=1
+			if(self.getCell(x,y+1).isAlive()):
+				counter+=1
+			if(self.getCell(x+1,y+1).isAlive()):
+				counter+=1
+		return counter
 
 	def interaction(self):
 		"""
 			this represents one cycle of time in which a cell interacts with its neighbors
 		"""
-
-		for x in range(self.width):
-			for y in range(self.height):
+		temp_board=dict(self.getBoard())
+		
+		for x in range(self.size):
+			for y in range(self.size):
 				#less than 2 neighbors die due to under population
-				if(self.getLiveNeighbors(self.board[x][y])<2):
-					self.board[x][y]=Cell(x,y,False)
+				if(self.getLiveNeighbors(temp_board[(x,y)])<2):
+					temp_board[(x,y)]=Cell(x,y,False)
 				#more than 3 neighbors, over population, no resources, death
-				elif self.getLiveNeighbors(self.board[x][y])>3:
-					self.board[x][y]=Cell(x,y,False)
+				elif self.getLiveNeighbors(temp_board[(x,y)])>3:
+					temp_board[(x,y)]=Cell(x,y,False)
 				#balanced population, supported economy, just right
-				elif  2<=self.getLiveNeighbors(self.board[x][y])<=3:
-					self.board[x][y]=Cell(x,y,True)
+				elif  2<=self.getLiveNeighbors(temp_board[(x,y)])<=3:
+					temp_board[(x,y)]=Cell(x,y,True)
 				#please resuurect, three angels have visited you
-				elif  self.getLiveNeighbors(self.board[x][y])==3 and !self.board[x][y].isAlive():
-					self.board[x][y]=Cell(x,y,True)
+				elif  self.getLiveNeighbors(temp_board[(x,y)])==3 and not temp_board[(x,y)].isAlive():
+					temp_board[(x,y)]=Cell(x,y,True)
+				else:
+					pass
+		self.board=dict(temp_board)
 
-	def draw(self):
-		"""draws the current state of the board on the gui or on the shell
+	
+
+
+	def initialize(self,config):
 		"""
+			config is a list of tuples containing a configuration to be loaded
+			sets the board with a new configuration
+		"""
+		#self.clear()
+		#make sure to call clear before initializing a configuration
+		temp_board=dict(self.getBoard())
+		for i in config:
+			temp_board[(i[0],i[1])]=Cell(i[0],i[1],True)
+		self.board=dict(temp_board)
+
+	def insert(self,x,y,status):
+		"""
+		x, is the x coordinate of a cell
+		y, is the y coordinate of a cell
+		status, tells whether cell is alive or not
+		"""
+		self.board[(x,y)]=Cell(x,y,status)
+
+	def clear(self):
+		"""
+		clears the board, before redrawing the configuration, before changing configuration
+		"""
+		temp_board=dict(self.getBoard())
+		for x in range(self.getSize()):
+			for y in range(self.getSize()):
+				temp_board[(x,y)]=Cell(x,y,False)
+		self.board=dict(temp_board)
+		
+
+
 
 
 
