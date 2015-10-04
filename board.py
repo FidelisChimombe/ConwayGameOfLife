@@ -50,27 +50,17 @@ class Board:
 		counter=0;
 		x=cell.getX()
 		y=cell.getY()
+		for i in range(-1,2,1):
+			for j in range(-1,2,1):
+				if i==0 and j==0:
+					pass
+				elif(x+i<0 or x+i>=self.size or y+j<0 or y+j>=self.size):
+					pass
+				else:
+					cell=self.getCell(x+i,y+j).isAlive()
+					if(cell):
+						counter+=1
 
-
-		if(x-1<0 or y-1<0 or  x+1>=self.getSize() or y+1>=self.getSize()):
-			pass
-		else:
-			if(self.getCell(x-1,y-1).isAlive()):
-				counter+=1
-			if(self.getCell(x,y-1).isAlive()):
-				counter+=1
-			if(self.getCell(x+1,y-1).isAlive()):
-				counter+=1
-			if(self.getCell(x-1,y).isAlive()):
-				counter+=1
-			if(self.getCell(x+1,y).isAlive()):
-				counter+=1
-			if(self.getCell(x-1,y+1).isAlive()):
-				counter+=1
-			if(self.getCell(x,y+1).isAlive()):
-				counter+=1
-			if(self.getCell(x+1,y+1).isAlive()):
-				counter+=1
 		return counter
 
 	def interaction(self):
@@ -78,7 +68,7 @@ class Board:
 			this represents one cycle of time in which a cell interacts with its neighbors
 		"""
 		temp_board=dict(self.getBoard())
-		
+		#self.clear()
 		for x in range(self.size):
 			for y in range(self.size):
 				#less than 2 neighbors die due to under population
@@ -105,7 +95,7 @@ class Board:
 			config is a list of tuples containing a configuration to be loaded
 			sets the board with a new configuration
 		"""
-		#self.clear()
+		self.clear()
 		#make sure to call clear before initializing a configuration
 		temp_board=dict(self.getBoard())
 		for i in config:
