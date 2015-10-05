@@ -1,3 +1,10 @@
+
+#fidelis chimombe
+#python: conway game of life
+#objective: build a complete desktop app in python using MVC architecture
+
+
+
 from cell import Cell
 class Board:
 
@@ -8,6 +15,7 @@ class Board:
 		self.size=size
 		
 		self.board={}
+
 
 		#use dictionary to represent the board
 		for x in range(self.size):
@@ -68,24 +76,29 @@ class Board:
 			this represents one cycle of time in which a cell interacts with its neighbors
 		"""
 		temp_board=dict(self.getBoard())
-		#self.clear()
 		for x in range(self.size):
 			for y in range(self.size):
 				#less than 2 neighbors die due to under population
 				if(self.getLiveNeighbors(temp_board[(x,y)])<2):
+					
 					temp_board[(x,y)]=Cell(x,y,False)
 				#more than 3 neighbors, over population, no resources, death
 				elif self.getLiveNeighbors(temp_board[(x,y)])>3:
+					
 					temp_board[(x,y)]=Cell(x,y,False)
 				#balanced population, supported economy, just right
-				elif  2<=self.getLiveNeighbors(temp_board[(x,y)])<=3:
+				elif  2<=self.getLiveNeighbors(temp_board[(x,y)])<=3 and temp_board[(x,y)].isAlive():
+					
 					temp_board[(x,y)]=Cell(x,y,True)
 				#please resuurect, three angels have visited you
-				elif  self.getLiveNeighbors(temp_board[(x,y)])==3 and not temp_board[(x,y)].isAlive():
+				elif  self.getLiveNeighbors(temp_board[(x,y)])==3 and temp_board[(x,y)].isAlive()==False:
+				
 					temp_board[(x,y)]=Cell(x,y,True)
 				else:
 					pass
+
 		self.board=dict(temp_board)
+
 
 	
 

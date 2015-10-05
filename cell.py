@@ -1,3 +1,11 @@
+
+#fidelis chimombe
+#python: conway game of life
+#objective: build a complete desktop app in python using MVC architecture
+
+
+
+from Tkinter import *
 class Cell:
 
 	def __init__(self, x, y, alive):
@@ -7,12 +15,17 @@ class Cell:
 		self.x=x
 		self.y=y
 		self.alive=alive
+		
+
 
 	def getX(self):
 		"""
 			returns the x coordinate of a square
 		"""
 		return self.x
+
+
+
 	def getY(self):
 		"""
 			returns the y coordinate of a square
