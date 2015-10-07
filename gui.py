@@ -216,7 +216,7 @@ class ConwayGui:
 
 	def speed_up(self):
 		while self.delay>0.005:
-			self.delay-=0.05
+			self.delay-=0.005
 
 
 	def speed_up_button(self):
