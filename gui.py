@@ -7,8 +7,8 @@
 from Tkinter import *
 import time 
 import threading
-
 from board import *
+
 class ConwayGui:
 	def __init__(self,board):
 
@@ -32,6 +32,17 @@ class ConwayGui:
 		(23,6),(25,1),(25,6),(25,2),(25,7),(35,3),(36,3),(35,4),(36,4),(18,6)]
 
 		self.block=[(25,15),(25,16),(26,15),(26,16)]
+		self.line =[(10,10),(10,11),(10,12)]
+		self.r_pentamino=[(11,12),(12,11),(12,12),(12,13),(13,11)]
+		self.die_hard=[(11,12),(12,12),(12,13),(16,13),(17,11),(17,13),(18,13)]
+		self.acorn=[(11,13),(12,11),(12,13),(14,12),(15,13),(16,13),(17,13)]
+
+
+		#guns
+		self.gun_1=[(11,16),(13,16),(13,15),(15,14),(15,13),(15,12),(17,11),(17,12),(17,13),(18,12)]
+
+		self.gun_2=[(10,11),(11,12),(11,15),(12,11),(12,12),(12,14),(13,14),(13,15),(14,13),(15,11),(15,13),(15,14),(15,15)]
+
 		self.current_configuration=self.gosper_glider_gun
 
 
@@ -39,9 +50,9 @@ class ConwayGui:
 		for x in range(self.size):
 			for y in range(self.size):
 				if self.board.getBoard()[(x,y)].isAlive():
-					self.board_tracker[(x,y)]=self.canvas.create_oval(x*self.factor,y*self.factor,(x+1)*self.factor,(y+1)*self.factor,fill="red")
+					self.board_tracker[(x,y)]=self.canvas.create_rectangle(x*self.factor,y*self.factor,(x+1)*self.factor,(y+1)*self.factor,fill="red")
 				else:
-					self.board_tracker[(x,y)]=self.canvas.create_oval(x*self.factor,y*self.factor,(x+1)*self.factor,(y+1)*self.factor,fill="green")
+					self.board_tracker[(x,y)]=self.canvas.create_rectangle(x*self.factor,y*self.factor,(x+1)*self.factor,(y+1)*self.factor,fill="green")
 
 		
 		self.draw()
@@ -72,10 +83,10 @@ class ConwayGui:
 				x2=(x+1)*self.factor
 				y2=(y+1)*self.factor
 				if (self.board.getBoard()[(x,y)].isAlive()):
-					self.canvas.create_oval(x1,y1,x2,y2,fill="red")
+					self.canvas.create_rectangle(x1,y1,x2,y2,fill="red")
 					
 				else:
-					self.canvas.create_oval(x1,y1,x2,y2,fill="green")
+					self.canvas.create_rectangle(x1,y1,x2,y2,fill="green")
 				
 		self.root.update()
 
@@ -101,46 +112,46 @@ class ConwayGui:
 		resume.pack(side=LEFT)
 		slow_down.pack(side=LEFT)
 		speed_up.pack(side=LEFT)
-		
-
-
-
-
-
-		
-
 
 		#left display
 		leftFrame=Frame(self.root)
 		leftFrame.pack(side=LEFT)
 		left_heading=Label(leftFrame,text="Game Configuration")
 		left_heading.pack()
+
+		##guns
 		b1=Button(leftFrame,text="gosper glider gun",fg="red",command=self.gosper)
+		b3=Button(leftFrame,text="gun 1",fg="red",command=self.gun_1)
+		b4=Button(leftFrame,text="gun 2",fg="blue",command=self.gun_2)
+
+		#still ones
+
 		b2=Button(leftFrame,text="block",fg="blue",command=self.block)
+
+
+		b5=Button(leftFrame,text="acorn",fg="red",command=self.acorn)
+		b6=Button(leftFrame,text="r-pentamino",fg="blue",command=self.r_pentamino)
+
+
+		b7=Button(leftFrame,text="die-hard",fg="red",command=self.die_hard)
+		b8=Button(leftFrame,text="line",fg="blue",command=self.line)
 		
 		b1.pack()
 		b2.pack()
+		b3.pack()
+		b4.pack()
+		b5.pack()
+		b6.pack()
+		b7.pack()
+		b8.pack()
 		
-
-
 
 		#middle display
 		middleFrame=Frame(self.root)
 		middleFrame.pack(side=LEFT)
 		middle_heading=Label(middleFrame,text="The Game")
 		middle_heading.pack()
-		self.canvas=Canvas(middleFrame,width=1000,height=500,bg="yellow")
-
-		#right display
-		# rightFrame=Frame(self.root)
-		# rightFrame.pack(side=LEFT)
-		# right_heading=Label(rightFrame,text="Statistics")
-		# right_heading.pack()
-		# b4=Button(rightFrame,text="click me",fg="red")
-		# b4.pack()
-
-
-		
+		self.canvas=Canvas(middleFrame,width=1000,height=700,bg="yellow")
 
 
 	def update(self):
@@ -157,6 +168,29 @@ class ConwayGui:
 	def gosper(self):
 		self.current_configuration=self.gosper_glider_gun
 		self.board.initialize(self.current_configuration)
+
+	def gun_1(self):
+		self.current_configuration=self.gun_1
+		self.board.initialize(self.current_configuration)
+
+	def gun_2(self):
+			self.current_configuration=self.gun_2
+			self.board.initialize(self.current_configuration)
+
+	def acorn(self):
+			self.current_configuration=self.acorn
+			self.board.initialize(self.current_configuration)
+
+	def die_hard(self):
+			self.current_configuration=self.die_hard
+			self.board.initialize(self.current_configuration)
+	def r_pentamino(self):
+			self.current_configuration=self.r_pentamino
+			self.board.initialize(self.current_configuration)
+
+	def line(self):
+			self.current_configuration=self.line
+			self.board.initialize(self.current_configuration)
 
 	
 
@@ -223,8 +257,6 @@ class ConwayGui:
 		t=threading.Thread(target=self.speed_up,args=[])
 		t.start()
 		t.join()
-
-
 
 b=Board(50)
 cg=ConwayGui(b)
