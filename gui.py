@@ -116,7 +116,7 @@ class ConwayGui:
 		#left display
 		leftFrame=Frame(self.root)
 		leftFrame.pack(side=LEFT)
-		left_heading=Label(leftFrame,text="Game Configuration")
+		left_heading=Label(leftFrame,text="Game Configurations")
 		left_heading.pack()
 
 		##guns
